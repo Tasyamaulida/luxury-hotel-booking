@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login | Luxury Hotel</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+    body { min-height:100vh; background:#f3f7ff; display:flex; align-items:center; justify-content:center; padding:20px; }
+    .login-container { width:100%; max-width:1200px; background:white; border-radius:40px; overflow:hidden; display:grid; grid-template-columns:1fr 1fr; box-shadow:0 20px 60px rgba(0,0,0,0.08); min-height: 700px; }
+    .left-side { position:relative; overflow:hidden; }
+    .left-side img { width:100%; height:100%; object-fit:cover; }
+    .overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.2)); padding:60px; display:flex; flex-direction:column; justify-content:space-between; color: white;}
+    .right-side { background:white; padding:60px; display:flex; align-items:center; justify-content:center; }
+    .login-box { width:100%; max-width:400px; }
+    .form-group { margin-bottom:25px; }
+    .form-group label { display:block; margin-bottom:10px; font-weight:600; color:#132238; }
+    .input-box { width:100%; height:60px; border:2px solid #dbeafe; border-radius:18px; padding:0 20px; display:flex; align-items:center; gap:15px; }
+    .input-box input { flex:1; border:none; outline:none; font-size:16px; background:none; }
+    .login-btn { width:100%; height:60px; border:none; border-radius:18px; background:linear-gradient(90deg, #1677ff, #4aa8ff); color:white; font-size:18px; font-weight:700; cursor:pointer; margin-top:10px; box-shadow:0 10px 20px rgba(74,168,255,0.3); transition: .3s; }
+    .login-btn:hover { transform: translateY(-3px); }
+    .errornote { background: #fff0f0; color: #ff4757; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 13px; list-style: none; }
+</style>
+</head>
+<body>
+<div class="login-container">
+    <div class="left-side">
+        <img src="{% static 'images/admin.png' %}" alt="">
+        <div class="overlay">
+            <div><h1 style="font-size:32px;">Luxury <span>HOTEL</span></h1><p>ADMIN PANEL</p></div>
+            <div><h2 style="font-size:48px; line-height:1.1; margin-bottom:20px;">Welcome Back, <span>Admin!</span> </h2><p style="font-size:18px; opacity:0.8;">Silahkan masuk untuk mengakses dashboard management.</p></div>
+            <div style="background:rgba(255,255,255,0.1); padding:20px; border-radius:20px; backdrop-filter:blur(10px);">
+                <strong>Keamanan Terjamin</strong><p style="font-size:13px; opacity:0.8;">Sistem terenkripsi untuk melindungi data hotel.</p>
+            </div>
+        </div>
+    </div>
+    <div class="right-side">
+        <div class="login-box">
+            <div style="text-align:center; margin-bottom:40px;">
+                <h2 style="font-size:32px; color:#132238;">Login Admin</h2>
+                <p style="color:#7b8ba7;">Masukkan kredensial anda</p>
+            </div>
+
+            {% if form.errors %}
+                <ul class="errornote"><li>Username atau Password salah!</li></ul>
+            {% endif %}
+
+            <form action="{{ app_path }}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Username</label>
+                    <div class="input-box"> <input type="text" name="username" placeholder="Username" required></div>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-box"> <input type="password" name="password" placeholder="Password" required></div>
+                </div>
+                <input type="hidden" name="next" value="{{ next }}">
+                <button type="submit" class="login-btn">LOG IN</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

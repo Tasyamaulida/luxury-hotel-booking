@@ -1,0 +1,452 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Luxury Hotel Admin</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#f5f9ff;
+    display:flex;
+    color:#132238;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:260px;
+    height:100vh;
+    background:white;
+    position:fixed;
+    left:0;
+    top:0;
+    border-right:1px solid #edf2f7;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+.logo{
+    padding:30px;
+    border-bottom:1px solid #edf2f7;
+}
+
+.logo h1{
+    font-size:30px;
+    font-weight:800;
+}
+
+.logo span{
+    color:#1677ff;
+}
+
+.logo p{
+    color:#1677ff;
+    font-weight:600;
+    font-size:13px;
+}
+
+/* MENU */
+
+.menu{
+    padding:20px;
+}
+
+.menu a{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:18px 22px;
+    text-decoration:none;
+    border-radius:18px;
+    color:#44526b;
+    font-weight:600;
+    margin-bottom:12px;
+    transition:.3s;
+}
+
+.menu a:hover,
+.menu .active{
+    background:linear-gradient(
+        90deg,
+        #1677ff,
+        #3ea6ff
+    );
+
+    color:white;
+}
+
+/* SIDE CARD */
+
+.side-card{
+    margin:20px;
+    background:white;
+    border-radius:26px;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,0.05);
+}
+
+.side-card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+}
+
+.side-content{
+    padding:18px;
+}
+
+.side-content h3{
+    margin-bottom:8px;
+}
+
+.side-content p{
+    color:#7b8ba7;
+    font-size:14px;
+    line-height:1.8;
+}
+
+/* MAIN */
+
+.main{
+    margin-left:260px;
+    width:calc(100% - 260px);
+}
+
+/* TOPBAR */
+
+.topbar{
+    height:90px;
+    background:white;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 35px;
+    border-bottom:1px solid #edf2f7;
+}
+
+.search{
+    width:350px;
+    height:55px;
+    background:#f5f9ff;
+    border-radius:18px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:0 20px;
+}
+
+.search input{
+    width:100%;
+    border:none;
+    outline:none;
+    background:none;
+}
+
+.admin{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.admin img{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+/* CONTENT */
+
+.content{
+    padding:35px;
+}
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.page-title h1{
+    font-size:42px;
+    margin-bottom:8px;
+}
+
+.page-title p{
+    color:#7b8ba7;
+}
+
+.btn{
+    background:linear-gradient(
+        90deg,
+        #1677ff,
+        #3ea6ff
+    );
+
+    color:white;
+    text-decoration:none;
+    padding:18px 28px;
+    border-radius:18px;
+    font-weight:700;
+    border:none;
+    cursor:pointer;
+}
+
+.card{
+    background:white;
+    border-radius:28px;
+    padding:28px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.04);
+}
+
+/* FORM */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group.full{
+    grid-column:1/3;
+}
+
+.form-group label{
+    font-weight:600;
+    margin-bottom:10px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+
+    width:100%;
+    padding:18px;
+
+    border:1px solid #dbe7f5;
+    border-radius:16px;
+
+    background:#fff;
+
+    font-size:15px;
+
+    outline:none;
+
+    transition:.3s;
+}
+
+.form-group textarea{
+    height:140px;
+    resize:none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+
+    border-color:#1677ff;
+
+    box-shadow:0 0 0 4px rgba(22,119,255,0.1);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+    <div>
+
+        <div class="logo">
+
+            <h1>
+                LUXURY<span>HOTEL</span>
+            </h1>
+
+            <p>ADMIN PANEL</p>
+
+        </div>
+
+        <div class="menu">
+
+    <!-- DASHBOARD -->
+
+    <a href="/admin/"
+    class="{% if request.path == '/admin/' %}active{% endif %}">
+
+        <i class="fa-solid fa-house"></i>
+
+        Dashboard
+
+    </a>
+
+
+    <!-- ROOMS -->
+
+    <a href="/admin/booking/room/"
+    class="{% if '/admin/booking/room' in request.path %}active{% endif %}">
+
+        <i class="fa-solid fa-bed"></i>
+
+        Rooms
+
+    </a>
+
+
+    <!-- BOOKINGS -->
+
+    <a href="/admin/booking/booking/"
+    class="{% if '/admin/booking/booking' in request.path %}active{% endif %}">
+
+        <i class="fa-solid fa-calendar-check"></i>
+
+        Bookings
+
+    </a>
+
+
+    <!-- AVAILABILITY -->
+
+    <a href="/admin/availability/"
+    class="{% if '/admin/availability' in request.path %}active{% endif %}">
+
+        <i class="fa-solid fa-chart-column"></i>
+
+        Availability
+
+    </a>
+
+
+    <!-- CUSTOMERS -->
+
+    <a href="/admin/customers/"
+    class="{% if '/admin/customers' in request.path %}active{% endif %}">
+
+        <i class="fa-solid fa-users"></i>
+
+        Customers
+
+    </a>
+
+</div>
+
+    </div>
+
+    <div class="side-card">
+
+        <img src="{% static 'images/card_pool.png' %}">
+
+        <div class="side-content">
+
+            <h3>Luxury Experience</h3>
+
+            <p>
+                Berikan pengalaman terbaik
+                untuk tamu Anda.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+    <div class="topbar">
+
+        <div class="search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input type="text"
+            placeholder="Search anything...">
+
+        </div>
+
+      <div class="admin">
+
+    <img src="{% static 'images/profile_admin.png' %}">
+
+    <div>
+
+        <h4>
+            {{ request.user.username }}
+        </h4>
+
+        <small>
+            Super Admin
+        </small>
+
+    </div>
+
+    <form action="/admin/logout/" method="post" style="margin:0;">
+        {% csrf_token %}
+
+        <button type="submit"
+        style="
+        width:42px;
+        height:42px;
+        border:none;
+        border-radius:12px;
+        background:#fff1f0;
+        color:#ff4d4f;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        cursor:pointer;
+        font-size:18px;
+        ">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+        </button>
+
+    </form>
+
+</div>
+
+    </div>
+
+    <div class="content">
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

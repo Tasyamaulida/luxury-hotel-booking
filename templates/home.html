@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury HOTEL 2026 | Beranda</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+        body { background:#f5f9ff; color:#1b2b4b; overflow-x: hidden; }
+        .container { width:90%; max-width:1300px; margin:auto; }
+
+        /* NAVBAR SINKRON */
+        nav { display:flex; justify-content:space-between; align-items:center; padding:30px 0; }
+        .logo { font-size:28px; font-weight:700; color: #132238; text-decoration: none; }
+        .logo span { color:#3ea6ff; }
+        .menu { display:flex; gap:35px; align-items: center; }
+        .menu a { text-decoration:none; color:#1b2b4b; font-weight:500; transition:.3s; font-size: 14px; position: relative; }
+        .menu a:hover, .menu a.active-nav { color:#3ea6ff; font-weight: 700; }
+        .menu a.active-nav::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background: #3ea6ff; border-radius: 5px; }
+        
+        .nav-right { display: flex; gap: 15px; align-items: center; }
+        .user-info { font-size: 13px; font-weight: 600; color: #6c7a96; }
+        .btn-auth-outline { padding:10px 25px; border:2px solid #3ea6ff; border-radius:50px; background:white; color:#3ea6ff; cursor:pointer; font-weight:600; text-decoration: none; font-size: 13px; transition: .3s; }
+        .btn-auth-outline:hover { background: #3ea6ff; color: white; }
+        .btn-logout { color: #ff4757; font-weight: 700; text-decoration: none; font-size: 13px; margin-left: 10px; }
+
+        /* HERO & BOOKING CARD */
+        .hero { background: white; border-radius: 40px; overflow: hidden; display: flex; align-items: center; min-height: 600px; box-shadow: 0 20px 60px rgba(0,0,0,0.05); margin-top: 10px; }
+        .hero-text { flex: 1.2; padding: 60px 80px; }
+        .hero-text small { color:#3ea6ff; letter-spacing:3px; font-weight:600; font-size: 12px; text-transform: uppercase; margin-bottom: 15px; display: block; }
+        .hero-text h1 { font-size: 60px; line-height: 1.1; font-weight: 700; color: #132238; margin-bottom: 25px; }
+        .hero-text h1 span { color:#3ea6ff; }
+        .hero-text p { font-size: 16px; color:#6c7a96; line-height: 1.8; margin-bottom: 40px; }
+        .hero-image { flex: 1; height: 600px; }
+        .hero-image img { width: 100%; height: 100%; object-fit: cover; }
+        .booking-card { background: white; width: 80%; margin: -70px auto 80px auto; border-radius: 30px; padding: 35px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 15px 50px rgba(0,0,0,0.08); position: relative; z-index: 10; border: none; }
+        .booking-item { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+        .booking-item label { font-weight: 700; color: #132238; font-size: 13px; }
+        .booking-item input { border: none; outline: none; color:#6c7a96; font-size: 14px; background: transparent; }
+        .search-btn { background: #3ea6ff; color: white; border: none; padding: 18px 45px; border-radius: 20px; cursor: pointer; font-size: 15px; font-weight: 700; text-decoration: none; text-align: center; }
+
+        /* ROOMS */
+        .rooms-header { text-align: center; margin-bottom: 50px; }
+        .rooms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; padding-bottom: 80px; }
+        .room-card { background: white; border-radius: 30px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.07); transition: .4s; border: none; }
+        .room-card:hover { transform: translateY(-10px); }
+        .room-img { height: 280px; width: 100%; object-fit: cover; }
+        .room-content { padding: 30px; }
+        .price-lux h2 { color: #3ea6ff; font-size: 24px; font-weight: 700; }
+        .btn-pesan { background: #3ea6ff; color: white; padding: 12px; border-radius: 12px; font-weight: 600; text-align: center; text-decoration: none; display: block; width: 100%; margin-top: 20px; border: none; }
+
+        /* TOAST POPUP MEWAH */
+        #toast-container { position: fixed; top: 25px; right: 25px; z-index: 11000; }
+        .toast-card { background: white; border-radius: 16px; padding: 18px 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border-left: 6px solid #2ecc71; display: flex; align-items: center; gap: 15px; margin-bottom: 10px; animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .toast-card.error { border-left-color: #ff4757; }
+        .toast-card.warning { border-left-color: #f1c40f; }
+        @keyframes slideIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <!-- Notifikasi Toast -->
+    {% if messages %}
+    <div id="toast-container">
+        {% for message in messages %}
+        <div class="toast-card {% if message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% endif %}">
+            <div style="font-weight: 800; color: inherit; font-size: 20px;">{% if message.tags == 'success' %}✓{% else %}!{% endif %}</div>
+            <div>
+                <strong style="display:block; font-size: 14px; color: #132238;">Notifikasi</strong>
+                <small style="color: #6c7a96;">{{ message }}</small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <script>setTimeout(() => { const tc = document.getElementById('toast-container'); if(tc) tc.remove(); }, 3000);</script>
+    {% endif %}
+
+    <div class="container">
+        <!-- Navbar Sinkron -->
+        <nav>
+            <a href="/" class="logo">Luxury <span>HOTEL 2026</span></a>
+            <div class="menu">
+                <a href="/" class="active-nav">Beranda</a>
+                <a href="/kamar">Kamar</a>
+                <a href="{% url 'facilities' %}">Fasilitas</a>
+                <a href="{% url 'about' %}">Tentang Kami</a>
+            </div>
+            <div class="nav-right">
+                {% if user.is_authenticated %}
+                    <span class="user-info">Halo, {{ user.email }}</span>
+                    <a href="{% url 'logout' %}" class="btn-logout">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn-auth-outline">Masuk</a>
+                    <a href="{% url 'register' %}" class="btn-auth-outline" style="background:#3ea6ff; color:white;">Daftar</a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div class="hero-text">
+                <small>LUXURY STAY EXPERIENCE</small>
+                <h1>Istirahat Berkualitas di <span>Era Modern.</span></h1>
+                <p>Nikmati pengalaman menginap premium dengan desain modern dan pemandangan terbaik.</p>
+                <a href="/kamar" class="btn-auth-outline" style="background:#3ea6ff; color:white; padding:18px 40px; border-radius:50px;">Jelajahi Kamar</a>
+            </div>
+            <div class="hero-image"><img src="{% static 'images/hotel-luxury.png' %}" alt="Luxury Pool"></div>
+        </section>
+
+        <!-- Search Form -->
+        <form action="/kamar" method="GET" class="booking-card">
+            <div class="booking-item"><label>Check-in</label><input type="date" name="check_in" value="2026-05-26"></div>
+            <div class="booking-item border-start ps-4"><label>Check-out</label><input type="date" name="check_out" value="2026-05-28"></div>
+            <div class="booking-item border-start ps-4"><label>Tamu</label><input type="text" placeholder="2 Dewasa"></div>
+            <button type="submit" class="search-btn">Cari Kamar</button>
+        </form>
+
+        <section class="rooms-header">
+            <h1 style="font-size: 32px; font-weight: 800; color: #132238;">Kamar <span>Terpopuler</span></h1>
+        </section>
+
+        <div class="rooms-grid">
+            {% for room in rooms %}
+            <div class="room-card">
+                <img src="{{ room.image.url }}" class="room-img">
+                <div class="room-content">
+                    <div class="room-top">
+                        <h3 style="font-size: 22px; font-weight: 700;">{{ room.name }}</h3>
+                        <div class="price-lux"><h2>Rp {{ room.price }}</h2></div>
+                    </div>
+                    <p style="color:#6c7a96; font-size:14px; margin-top:10px; line-height: 1.6;">{{ room.description|truncatewords:15 }}</p>
+                    {% if user.is_authenticated %}
+                        <a href="/kamar" class="btn-pesan">Pesan Sekarang</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn-pesan">Pesan Sekarang</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,197 @@
+{% extends 'admin/base_site.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div class="page-title">
+
+        <h1>Tambah Kamar Baru</h1>
+
+        <p>
+            Lengkapi informasi kamar dengan detail akurat.
+        </p>
+
+    </div>
+
+    <a href="/admin/booking/room/" class="btn">
+
+        ← Kembali ke Daftar Kamar
+
+    </a>
+
+</div>
+
+<form method="POST" enctype="multipart/form-data">
+
+{% csrf_token %}
+
+{% if adminform.form.errors %}
+<div style="
+background:#fee2e2;
+color:#dc2626;
+padding:20px;
+margin-bottom:20px;
+border-radius:12px;
+font-weight:bold;
+">
+{{ adminform.form.errors }}
+</div>
+{% endif %}
+
+<div style="
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:28px;
+">
+
+    <!-- LEFT -->
+
+    <div>
+
+        <div class="card">
+
+            <h2 style="margin-bottom:25px;">
+                Informasi Dasar
+            </h2>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Nama Kamar</label>
+
+                    {{ adminform.form.name }}
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Tipe Kamar</label>
+
+                    {{ adminform.form.category }}
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Total Kamar</label>
+
+                    {{ adminform.form.total_rooms }}
+<div class="form-group">
+    <label>Kamar Tersedia</label>
+    {{ adminform.form.available_rooms }}
+</div>
+                </div>
+
+                <div class="form-group">
+
+                    <label>Kapasitas</label>
+
+                    {{ adminform.form.capacity }}
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Harga</label>
+
+                    {{ adminform.form.price }}
+
+                </div>
+
+                <div class="form-group full">
+
+                    <label>Deskripsi</label>
+
+                    {{ adminform.form.description }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
+
+    <div>
+
+        <div class="card">
+
+            <h2 style="margin-bottom:20px;">
+                Upload Foto
+            </h2>
+
+            <div style="
+            border:2px dashed #dbeafe;
+            border-radius:24px;
+            padding:50px;
+            text-align:center;
+            ">
+
+                <i class="fa-solid fa-cloud-arrow-up"
+                style="
+                font-size:50px;
+                color:#1677ff;
+                margin-bottom:15px;
+                "></i>
+
+                <h3>Upload Foto Kamar</h3>
+
+                <p style="
+                color:#7b8ba7;
+                margin-top:8px;
+                margin-bottom:20px;
+                ">
+                    JPG, PNG atau WEBP
+                </p>
+
+                {{ adminform.form.image }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div style="
+margin-top:30px;
+display:flex;
+gap:20px;
+">
+
+    <button type="reset"
+    style="
+    flex:1;
+    height:60px;
+    border:none;
+    border-radius:18px;
+    background:white;
+    font-weight:700;
+    ">
+
+        Reset
+
+    </button>
+
+    <button type="submit"
+    class="btn"
+    style="
+    flex:2;
+    height:60px;
+    ">
+
+        Simpan Kamar
+
+    </button>
+
+</div>
+
+</form>
+
+{% endblock %}

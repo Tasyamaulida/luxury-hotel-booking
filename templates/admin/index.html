@@ -1,0 +1,186 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+{{ block.super }}
+
+<div id="content-main">
+
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin-bottom: 40px;">
+
+        <div style="background:white; padding:30px; border-radius:25px; box-shadow:0 10px 30px rgba(0,0,0,0.02);">
+            <small style="color:var(--text-muted); font-weight:700; text-transform:uppercase; font-size:11px;">
+                Total Booking
+            </small>
+
+            <h2 style="font-size:32px; font-weight:800; color:var(--text-dark); margin:5px 0;">
+                {{ total_bookings }}
+            </h2>
+
+            <span style="color:#05cd99; font-size:11px; font-weight:700;">
+                Booking Aktif
+            </span>
+        </div>
+
+        <div style="background:white; padding:30px; border-radius:25px; box-shadow:0 10px 30px rgba(0,0,0,0.02);">
+            <small style="color:var(--text-muted); font-weight:700; text-transform:uppercase; font-size:11px;">
+                Total Customers
+            </small>
+
+            <h2 style="font-size:32px; font-weight:800; color:var(--text-dark); margin:5px 0;">
+                {{ total_customers }}
+            </h2>
+
+            <span style="color:var(--lux-blue); font-size:11px; font-weight:700;">
+                Pelanggan Aktif
+            </span>
+        </div>
+
+        <div style="background:white; padding:30px; border-radius:25px; box-shadow:0 10px 30px rgba(0,0,0,0.02);">
+            <small style="color:var(--text-muted); font-weight:700;">
+                Kamar Tersedia
+            </small>
+
+            <h2 style="font-size:32px; font-weight:800; color:var(--text-dark); margin:5px 0;">
+                {{ available_rooms }}
+            </h2>
+        </div>
+
+        <div style="background:white; padding:30px; border-radius:25px; box-shadow:0 10px 30px rgba(0,0,0,0.02);">
+            <small style="color:var(--text-muted); font-weight:700;">
+                Check In Hari Ini
+            </small>
+
+            <h2 style="font-size:32px; font-weight:800; color:var(--text-dark); margin:5px 0;">
+                {{ today_checkins }}
+            </h2>
+        </div>
+
+    </div>
+
+    <div style="display: grid; grid-template-columns: 2.2fr 1fr; gap: 30px;">
+
+        <div style="background:white; padding:35px; border-radius:32px; box-shadow:0 10px 30px rgba(0,0,0,0.02);">
+
+            <h4 style="font-weight:800; color:var(--text-dark); margin-bottom:25px;">
+                Booking Terbaru
+            </h4>
+
+            <table style="width:100%; border-collapse:collapse;">
+
+                <thead>
+                    <tr style="border-bottom:2px solid #f5f9ff;">
+                        <th style="text-align:left; padding:15px; color:var(--text-muted); font-size:11px;">
+                            TAMU
+                        </th>
+
+                        <th style="text-align:left; padding:15px; color:var(--text-muted); font-size:11px;">
+                            KAMAR
+                        </th>
+
+                        <th style="text-align:left; padding:15px; color:var(--text-muted); font-size:11px;">
+                            STATUS
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                {% for b in recent_bookings %}
+
+                    <tr style="border-bottom:1px solid #f5f9ff;">
+
+                        <td style="padding:15px; font-weight:700; color:var(--text-dark);">
+                            {{ b.user.username }}
+                        </td>
+
+                        <td style="padding:15px; color:var(--text-muted);">
+                            {{ b.room.name }}
+                        </td>
+
+                        <td style="padding:15px;">
+
+                            {% if b.status == 'Confirmed' %}
+
+                                <span style="background:#e6fffa;color:#05cd99;padding:5px 12px;border-radius:10px;font-size:11px;font-weight:800;">
+                                    Confirmed
+                                </span>
+
+                            {% elif b.status == 'Pending' %}
+
+                                <span style="background:#fffaf0;color:#ffa800;padding:5px 12px;border-radius:10px;font-size:11px;font-weight:800;">
+                                    Pending
+                                </span>
+
+                            {% elif b.status == 'Cancelled' %}
+
+                                <span style="background:#fee2e2;color:#dc2626;padding:5px 12px;border-radius:10px;font-size:11px;font-weight:800;">
+                                    Cancelled
+                                </span>
+
+                            {% elif b.status == 'Selesai' %}
+
+                                <span style="background:#dbeafe;color:#2563eb;padding:5px 12px;border-radius:10px;font-size:11px;font-weight:800;">
+                                    Selesai
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+                        <td colspan="3">
+                            Belum ada booking
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div style="background:white; border-radius:32px; padding:30px; box-shadow:0 10px 30px rgba(0,0,0,0.02);">
+
+            <h4 style="font-weight:800; color:var(--text-dark); margin-bottom:25px;">
+                Ketersediaan
+            </h4>
+
+            {% for room in dashboard_rooms %}
+
+            <div style="display:flex; gap:15px; margin-bottom:20px;">
+
+                <img src="{{ room.image.url }}"
+                     style="width:70px; height:50px; border-radius:12px; object-fit:cover;">
+
+                <div style="flex:1;">
+
+                    <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:var(--text-dark);">
+                        <span>{{ room.name }}</span>
+                        <span>{{ room.percent }}%</span>
+                    </div>
+
+                    <div style="width:100%; height:6px; background:#f0f7ff; border-radius:10px; margin-top:5px; overflow:hidden;">
+                       <div
+    style="height:100%; background:var(--lux-blue);"
+    data-width="{{ room.percent }}">
+</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

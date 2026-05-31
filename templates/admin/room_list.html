@@ -1,0 +1,126 @@
+{% extends 'admin/base_site.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div class="page-title">
+
+        <h1>Daftar Kamar</h1>
+
+        <p>
+            Kelola semua kamar hotel dengan mudah.
+        </p>
+
+    </div>
+
+    <a href="add/" class="btn">
+
+        + Tambah Kamar Baru
+
+    </a>
+
+</div>
+
+<div class="card">
+
+    <table width="100%">
+
+        <thead>
+
+            <tr>
+
+                <th align="left">Kamar</th>
+                <th align="left">Tipe</th>
+                <th align="left">Harga</th>
+                <th align="left">Total</th>
+                <th align="left">Tersedia</th>
+                <th align="left">Aksi</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for room in cl.result_list %}
+
+            <tr>
+
+                <td style="padding:20px 0;">
+
+                    <div style="
+                    display:flex;
+                    align-items:center;
+                    gap:15px;
+                    ">
+
+                        <img src="{{ room.image.url }}"
+                        style="
+                        width:90px;
+                        height:70px;
+                        border-radius:16px;
+                        object-fit:cover;
+                        ">
+
+                        <div>
+
+                            <h3>{{ room.name }}</h3>
+
+                            <small>
+                                {{ room.category }}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </td>
+
+                <td>{{ room.category }}</td>
+
+                <td>
+                    Rp {{ room.price }}
+                </td>
+
+                <td>
+                    {{ room.total_rooms }}
+                </td>
+
+                <td>
+                    {{ room.available_rooms }}
+                </td>
+
+                <td>
+
+                    <a href="{{ room.id }}/change/"
+                    style="
+                    width:40px;
+                    height:40px;
+                    border-radius:12px;
+                    background:#eef6ff;
+                    color:#1677ff;
+                    display:inline-flex;
+                    align-items:center;
+                    justify-content:center;
+                    text-decoration:none;
+                    ">
+
+                        <i class="fa-solid fa-pen"></i>
+
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,189 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="page-header">
+
+```
+<div>
+
+    <h1 style="font-size:42px;">
+        Bookings
+    </h1>
+
+    <p style="color:#7b8ba7;">
+        Kelola semua booking hotel.
+    </p>
+
+</div>
+```
+
+</div>
+
+<div class="card">
+
+```
+<table style="
+width:100%;
+border-collapse:collapse;
+">
+
+    <thead>
+
+        <tr style="
+        border-bottom:1px solid #edf2f7;
+        ">
+
+            <th>Tamu</th>
+            <th>Kamar</th>
+            <th>Check In</th>
+            <th>Check Out</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Aksi</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for booking in cl.queryset %}
+
+        <tr style="
+        border-bottom:1px solid #edf2f7;
+        ">
+
+            <td style="padding:20px 0;">
+                {{ booking.user.username }}
+            </td>
+
+            <td>
+                {{ booking.room.name }}
+            </td>
+
+            <td>
+                {{ booking.check_in }}
+            </td>
+
+            <td>
+                {{ booking.check_out }}
+            </td>
+
+            <td>
+
+                {% if booking.status == 'Confirmed' %}
+
+                <span style="
+                background:#dcfce7;
+                color:#16a34a;
+                padding:8px 14px;
+                border-radius:12px;
+                font-size:13px;
+                font-weight:600;
+                ">
+                    Confirmed
+                </span>
+
+                {% elif booking.status == 'Pending' %}
+
+                <span style="
+                background:#fef3c7;
+                color:#d97706;
+                padding:8px 14px;
+                border-radius:12px;
+                font-size:13px;
+                font-weight:600;
+                ">
+                    Pending
+                </span>
+
+                {% elif booking.status == 'Selesai' %}
+
+                <span style="
+                background:#dbeafe;
+                color:#2563eb;
+                padding:8px 14px;
+                border-radius:12px;
+                font-size:13px;
+                font-weight:600;
+                ">
+                    Selesai
+                </span>
+
+                {% elif booking.status == 'Cancelled' %}
+
+                <span style="
+                background:#fee2e2;
+                color:#dc2626;
+                padding:8px 14px;
+                border-radius:12px;
+                font-size:13px;
+                font-weight:600;
+                ">
+                    Cancelled
+                </span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+                Rp {{ booking.total_price }}
+            </td>
+
+            <td>
+
+                <a href="/admin/booking-status/{{ booking.id }}/Confirmed/"
+                   style="
+                   background:#22c55e;
+                   color:white;
+                   padding:8px 12px;
+                   border-radius:8px;
+                   text-decoration:none;
+                   font-size:12px;
+                   margin-right:5px;
+                   ">
+                    Confirm
+                </a>
+
+                <a href="/admin/booking-status/{{ booking.id }}/Selesai/"
+                   style="
+                   background:#3b82f6;
+                   color:white;
+                   padding:8px 12px;
+                   border-radius:8px;
+                   text-decoration:none;
+                   font-size:12px;
+                   margin-right:5px;
+                   ">
+                    Selesai
+                </a>
+
+                <a href="/admin/booking-status/{{ booking.id }}/Cancelled/"
+                   style="
+                   background:#ef4444;
+                   color:white;
+                   padding:8px 12px;
+                   border-radius:8px;
+                   text-decoration:none;
+                   font-size:12px;
+                   ">
+                    Cancel
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+```
+
+</div>
+
+{% endblock %}

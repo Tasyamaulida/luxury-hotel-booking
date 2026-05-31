@@ -1,0 +1,166 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Booking Kamar</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+
+        body{
+            margin:0;
+            font-family:Poppins;
+            background:#f5f9ff;
+        }
+
+        .container{
+            width:1100px;
+            margin:60px auto;
+        }
+
+        .card{
+            background:white;
+            border-radius:30px;
+            overflow:hidden;
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            box-shadow:0 10px 40px rgba(0,0,0,.06);
+        }
+
+        .image img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+        }
+
+        .content{
+            padding:50px;
+        }
+
+        .title{
+            font-size:42px;
+            font-weight:800;
+            color:#071739;
+            margin-bottom:10px;
+        }
+
+        .price{
+            color:#3b82f6;
+            font-size:30px;
+            font-weight:700;
+            margin-bottom:25px;
+        }
+
+        .desc{
+            color:#7a8499;
+            line-height:1.8;
+            margin-bottom:35px;
+        }
+
+        .form-group{
+            margin-bottom:20px;
+        }
+
+        .form-group label{
+            display:block;
+            margin-bottom:8px;
+            font-weight:600;
+        }
+
+        .form-control{
+            width:100%;
+            padding:15px;
+            border-radius:14px;
+            border:1px solid #dbe4f3;
+            font-size:15px;
+        }
+
+        .btn{
+            width:100%;
+            padding:18px;
+            border:none;
+            border-radius:16px;
+            background:#3b82f6;
+            color:white;
+            font-size:16px;
+            font-weight:700;
+            cursor:pointer;
+            margin-top:10px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="image">
+            <img src="{{ room.image.url }}">
+        </div>
+
+        <div class="content">
+
+            <div class="title">
+                {{ room.name }}
+            </div>
+
+            <div class="price">
+                Rp {{ room.price }}
+            </div>
+
+            <div class="desc">
+                {{ room.description }}
+            </div>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label>Check In</label>
+                    <input type="date"
+                           name="check_in"
+                           class="form-control"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label>Check Out</label>
+                    <input type="date"
+                           name="check_out"
+                           class="form-control"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label>Jumlah Tamu</label>
+                    <input type="number"
+                           name="guests"
+                           class="form-control"
+                           min="1"
+                           value="1">
+                </div>
+
+                <button class="btn">
+                    Booking Sekarang
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

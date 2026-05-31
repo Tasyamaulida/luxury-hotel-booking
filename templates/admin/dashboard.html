@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Luxury Hotel | Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #f4f7fe;
+            --primary: #4318ff; /* Biru Royal Luxury */
+            --text-dark: #1b2559;
+            --sidebar-width: 280px;
+        }
+
+        body { 
+            background-color: var(--bg-body); 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            color: var(--text-dark);
+        }
+
+        /* SIDEBAR GLASSMORPHISM */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            background: white;
+            padding: 40px 20px;
+            border-right: 1px solid #e0e5f2;
+        }
+
+        .logo-area { font-size: 22px; font-weight: 800; margin-bottom: 50px; color: var(--primary); text-align: center; }
+        
+        .nav-menu { list-style: none; padding: 0; }
+        .nav-item { 
+            padding: 15px 25px; 
+            margin-bottom: 8px; 
+            border-radius: 15px; 
+            color: #a3aed0; 
+            font-weight: 600; 
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: block;
+        }
+        .nav-item.active { background: #f4f7fe; color: var(--text-dark); border-right: 4px solid var(--primary); }
+        .nav-item:hover { color: var(--primary); background: #f4f7fe; }
+
+        /* MAIN CONTENT */
+        .main-content { margin-left: var(--sidebar-width); padding: 40px; }
+
+        /* STAT CARDS */
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.02);
+            border: none;
+        }
+        .stat-card h3 { font-weight: 800; font-size: 28px; margin: 10px 0; }
+        .stat-card p { color: #a3aed0; font-weight: 600; font-size: 14px; margin: 0; }
+
+        /* TABLE AREA */
+        .table-container {
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.02);
+        }
+
+        .table thead th { border: none; color: #a3aed0; font-size: 13px; text-transform: uppercase; padding: 20px; }
+        .table tbody td { border: none; padding: 20px; vertical-align: middle; font-weight: 600; font-size: 14px; }
+
+        .status-badge {
+            padding: 6px 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .status-confirmed { background: #e6fffa; color: #05cd99; }
+        .status-pending { background: #fffaf0; color: #ffa800; }
+
+        .btn-view-all {
+            background: #f4f7fe;
+            color: var(--primary);
+            border-radius: 12px;
+            padding: 8px 20px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-area">LUXURY HOTEL</div>
+        <div class="nav-menu">
+            <a href="#" class="nav-item active">🏠 Dashboard</a>
+            <a href="/admin/booking/room/" class="nav-item">🛏 Rooms</a>
+            <a href="/admin/booking/booking/" class="nav-item">📅 Bookings</a>
+            <a href="#" class="nav-item">📊 Availability</a>
+            <a href="/admin/auth/user/" class="nav-item">👤 Customers</a>
+            <a href="/" class="nav-item mt-5 text-danger">⬅ Logout</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h4 class="fw-bold m-0">Dashboard</h4>
+                <p class="text-muted small">Selamat datang kembali, Admin! 👋</p>
+            </div>
+            <div class="d-flex gap-3">
+                <input type="text" class="form-control rounded-pill border-0 shadow-sm px-4" placeholder="Cari data...">
+                <img src="https://i.pravatar.cc/45" class="rounded-circle shadow-sm">
+            </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <p>Total Booking</p>
+                    <h3>{{ total_bookings }}</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <p>Kamar Tersedia</p>
+<h3>{{ available_rooms }}</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <p>Total Customers</p>
+                    <h3>{{ total_customers }}</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <p>Check In Hari Ini</p>
+<h3>{{ today_checkins }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Recent Bookings -->
+         <div class="table-container">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-bold">Ketersediaan Kamar</h5>
+    </div>
+
+    <table class="table">
+
+        <thead>
+            <tr>
+                <th>Kamar</th>
+                <th>Tersedia</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for room in dashboard_rooms %}
+
+            <tr>
+
+                <td>{{ room.name }}</td>
+
+                <td>
+                    {{ room.percent }}%
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold">Booking Terbaru</h5>
+                <a href="/admin/booking/booking/" class="btn-view-all">Lihat Semua</a>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Tamu</th>
+                        <th>Kamar</th>
+                        <th>Check In</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+{% for b in recent_bookings %}
+
+<tr>
+
+    <td>{{ b.user.username }}</td>
+
+    <td>{{ b.room.name }}</td>
+
+    <td>{{ b.check_in }}</td>
+
+    <td>
+
+        {% if b.status == 'Confirmed' %}
+
+        <span class="status-badge status-confirmed">
+            Confirmed
+        </span>
+
+        {% elif b.status == 'Pending' %}
+
+        <span class="status-badge status-pending">
+            Pending
+        </span>
+
+        {% elif b.status == 'Cancelled' %}
+
+        <span class="status-badge"
+              style="background:#fee2e2;color:#dc2626;">
+            Cancelled
+        </span>
+
+        {% elif b.status == 'Selesai' %}
+
+        <span class="status-badge"
+              style="background:#dbeafe;color:#2563eb;">
+            Selesai
+        </span>
+
+        {% endif %}
+
+    </td>
+
+    <td>
+        Rp {{ b.total_price }}
+    </td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+    <td colspan="5" class="text-center">
+        Belum ada booking.
+    </td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+</html>
